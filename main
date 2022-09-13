@@ -1,0 +1,43 @@
+#include <iostream>
+#include <forward_list>
+#include <unordered_map>
+
+template<typename T>
+std::forward_list<T> func(std::forward_list<T> list)
+{
+    // неупорядоченный ассоциативный контейнер
+    std::unordered_map<T, std::size_t> map;
+    // подсчитываем число вхождений
+    for (const auto& x : list)
+        map[x]++;
+
+    list.clear();// очищаем список
+
+    // заполняем уникальными
+    for (const auto& p : map)
+        if (p.second == 1)
+            list.push_front(p.first);
+
+    return list;
+}
+
+// вывод содержимого контейнера на экран
+template<typename T>
+void print(const std::forward_list<T>& arr)
+{
+    for (const auto& x : arr)
+    {
+        std::cout << x << ' ';
+    }
+    std::cout << '\n';
+}
+
+int main(void)
+{
+    std::forward_list<int> l1 = { 2, 5, 8, 1, 21, 8, 2, 21 };
+    std::cout << "Before:";
+    print(l1);
+    l1 = func(l1);
+    std::cout << "After:";
+    print(l1);
+}
